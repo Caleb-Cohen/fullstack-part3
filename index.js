@@ -85,27 +85,46 @@ app.get('/api/notes', (req, res) => {
 app.delete('/api/notes/:id', (request, response) => {
   const id = Number(request.params.id)
   notes = notes.filter(note => note.id !== id)
-
   response.status(204).end()
 })
 
-// app.get('/api/notes/:id', (request, response) => {
-//   const id = Number(request.params.id)
-//   const note = notes.find(note => note.id === id)
+app.delete('/api/persons/:id',(req,res) => {
+  const id = Number(req.params.id)
+  persons = persons.filter(entry => entry.id != id)
+  res.status(204).end()
+})
 
-//   if (note) {
-//     response.json(note)
-//   } else {
-//     response.status(404).end()
-//   }
-// })
+app.get('/api/persons/:id', (request, response) => {
+  const id = Number(request.params.id)
+  const person = persons.find(persons => persons.id === id)
+
+  if (person) {
+    response.json(person)
+  } else {
+    response.status(404).end()
+  }
+})
 
 app.get('/api/persons', (request, response) => {
   const id = Number(request.params.id)
-  const note = persons.find(persons => persons.id === id)
+  const person = persons.find(persons => persons.id === id)
 
   if (persons) {
     response.json(persons)
+  } else {
+    response.status(404).end()
+  }
+})
+
+app.get('/info', (request, response) => {
+  const id = Number(request.params.id)
+  const person = persons.find(persons => persons.id === id)
+  const currentDate = new Date()
+
+  if (persons) {
+    response.send(`<h1>Phonebook has info for ${persons.length} people</h1>
+                    <div>${currentDate}</div>`)
+    console.log(response.date)
   } else {
     response.status(404).end()
   }
