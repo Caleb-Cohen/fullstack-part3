@@ -2,8 +2,11 @@ const express = require('express')
 const app = express()
 app.use(express.json())
 const morgan = require('morgan')
-app.use(morgan('tiny'))
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms - :object'))
 
+morgan.token('object', function getId (req,res) {
+  return `${JSON.stringify(req.body)}`
+})
 // let notes = [
 //   {
 //     id: 1,
@@ -97,7 +100,6 @@ app.post('/api/persons', (req, res) => {
     name: body.name,
     number: body.number
   }
-
   person = persons.push(entry)
 
   res.json(entry)
