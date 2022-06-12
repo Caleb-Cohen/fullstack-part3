@@ -1,6 +1,8 @@
 const express = require('express')
 const app = express()
 app.use(express.json())
+const morgan = require('morgan')
+app.use(morgan('tiny'))
 
 // let notes = [
 //   {
@@ -80,6 +82,16 @@ const generateId = () => {
 app.post('/api/persons', (req, res) => {
   const body  = req.body
 
+  if(!body.name){
+      return res.status(400).json({error: 'name is missing'})
+  }
+
+  if(!body.number){
+      return res.status(400).json({error: `must include number`})
+  }
+  if(persons.some(entry => entry.name === body.name)){
+    return res.status(400).json({error: "this name already exists in the phonebook"})
+  }
   let entry = {
     id: generateId(),
     name: body.name,
